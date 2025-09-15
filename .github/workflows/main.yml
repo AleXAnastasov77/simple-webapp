@@ -31,16 +31,18 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
+        working-directory: infra
         run: terraform init
 
       - name: Terraform Plan
+        working-directory: infra
         run: terraform plan -out=tfplan
 
       - name: Upload Plan Artifact
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: tfplan
+          path: infra/tfplan
 
   terraform-apply:
     name: Terraform Apply
@@ -55,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: tfplan
-          path: .
+          path: infra
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -67,7 +69,9 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
+        working-directory: infra
         run: terraform init
 
       - name: Terraform Apply
+        working-directory: infra
         run: terraform apply -auto-approve tfplan
