@@ -17,4 +17,5 @@ terraform {
 provider "aws" {
   region = var.region
   alias = "application"
+  #profile = "fictisb_IsbUsersPS-057827529833"
 }
