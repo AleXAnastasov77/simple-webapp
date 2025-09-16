@@ -6,16 +6,16 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "tfstate-alex-cs1"
-    key    = "dev/terraform.tfstate"
-    region = "eu-central-1"
-    encrypt = true
+    bucket       = "tfstate-alex-cs1"
+    key          = "dev/terraform.tfstate"
+    region       = "eu-central-1"
+    encrypt      = true
     use_lockfile = true
   }
 }
 
 provider "aws" {
   region = var.region
-  alias = "application"
+  alias  = "application"
   #profile = "fictisb_IsbUsersPS-057827529833"
 }
