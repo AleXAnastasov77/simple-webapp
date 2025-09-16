@@ -68,10 +68,17 @@ resource "aws_internet_gateway" "igw_cs1" {
     Name = "igw_cs1"
   }
 }
+# Allocate an Elastic IP for the NAT gateway
+resource "aws_eip" "eip_natgw" {
+  domain = "vpc"
 
+  tags = {
+    Name = "eip_natgw"
+  }
+}
 resource "aws_nat_gateway" "natgw_cs1" {
   subnet_id     = aws_subnet.public_cs1_A.id
-
+  allocation_id = aws_eip.eip_natgw.id
   tags = {
     Name = "natgw_cs1"
   }
@@ -96,7 +103,7 @@ resource "aws_route_table" "rt_private_cs1" {
   vpc_id = aws_vpc.vpc_cs1.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.natgw_cs1.id
   }
   tags = {
