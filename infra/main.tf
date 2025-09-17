@@ -25,18 +25,18 @@ resource "aws_db_subnet_group" "db_subnetgroup_cs1" {
 }
 
 resource "aws_db_instance" "webapp_mysqldb_cs1" {
-  allocated_storage    = 20
-  max_allocated_storage = 25
-  db_subnet_group_name = aws_db_subnet_group.db_subnetgroup_cs1.name
-  engine               = "mysql"
-  engine_version       = "8.0"
-  instance_class       = "db.t3.micro"
-  username             = var.db_username
-  password             = var.db_password
-  parameter_group_name = "default.mysql8.0"
-  skip_final_snapshot  = false
+  allocated_storage         = 20
+  max_allocated_storage     = 25
+  db_subnet_group_name      = aws_db_subnet_group.db_subnetgroup_cs1.name
+  engine                    = "mysql"
+  engine_version            = "8.0"
+  instance_class            = "db.t3.micro"
+  username                  = var.db_username
+  password                  = var.db_password
+  parameter_group_name      = "default.mysql8.0"
+  skip_final_snapshot       = false
   final_snapshot_identifier = "webapp-mysqldb-final-${formatdate("YYYYMMDDhhmmss", timestamp())}"
-  multi_az             = true
-  storage_type = "gp3"
-  vpc_security_group_ids = [aws_security_group.db_sg.id]
+  multi_az                  = true
+  storage_type              = "gp2"
+  vpc_security_group_ids    = [aws_security_group.db_sg.id]
 }
