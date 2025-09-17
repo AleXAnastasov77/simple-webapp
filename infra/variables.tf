@@ -11,7 +11,6 @@ variable "tags" {
     environment = "Development"
     project     = "Case Study 1"
     owner       = "Aleks Anastasov"
-    region      = "eu-central-1"
   }
 }
 
