@@ -43,4 +43,10 @@ build {
   provisioner "ansible-local" {
     playbook_file = "./playbooks/webserver.playbook.yaml"
   }
+
+  post-processor "shell-local" {
+    inline = [
+      "aws ssm put-parameter --name '/cs1/webserver/ami' --value '{{ .ArtifactId }}' --type String --overwrite"
+    ]
+  }
 }
