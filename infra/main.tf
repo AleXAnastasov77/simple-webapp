@@ -8,7 +8,7 @@ provider "aws" {
   default_tags {
     tags = merge(
       var.tags,
-      aws_servicecatalogappregistry_application.marketing_web_app.application_tag
+      aws_servicecatalogappregistry_application.simple_web_app.application_tag
     )
   }
 }
