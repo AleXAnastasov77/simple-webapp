@@ -27,7 +27,7 @@ resource "aws_launch_template" "cs1_webapp" {
 # ////////////////////// ALB & ASG //////////////////////////
 
 resource "aws_lb_target_group" "lbtg_cs1" {
-  name        = "lbtg_cs1"
+  name        = "lbtg-cs1"
   target_type = "instance"
   port        = 80
   protocol    = "HTTP"
