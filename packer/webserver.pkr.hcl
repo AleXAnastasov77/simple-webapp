@@ -43,10 +43,7 @@ build {
   provisioner "ansible-local" {
     playbook_file = "./playbooks/webserver.playbook.yaml"
   }
-
-  post-processor "shell-local" {
-    inline = [
-      "for /f \"tokens=2 delims=:\" %i in (\"{{ .ArtifactId }}\") do aws ssm put-parameter --name \"/cs1/webserver/ami\" --value %i --type String --overwrite"
-    ]
+  post-processor "manifest" {
+    output = "manifest.json"
   }
 }
