@@ -15,9 +15,6 @@ app.config['MYSQL_DATABASE_DB'] = os.getenv("DB_NAME")
 app.config['MYSQL_DATABASE_HOST'] = os.getenv("DB_HOST")
 mysql.init_app(app)
 
-conn = mysql.connect()
-
-cursor = conn.cursor()
 
 @app.route("/")
 def main():
@@ -33,6 +30,8 @@ def hello():
 
 @app.route('/read from database')
 def read():
+    conn = mysql.connect()
+    cursor = conn.cursor()
     cursor.execute("SELECT * FROM employees")
     row = cursor.fetchone()
     result = []

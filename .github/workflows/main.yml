@@ -19,7 +19,7 @@ jobs:
     env:
       TF_VAR_DB_HOST: ${{ secrets.DB_HOST }}
       TF_VAR_DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      TV_VAR_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TF_VAR_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       TF_VAR_DB_NAME: ${{ secrets.DB_NAME }}
 
     steps:
@@ -57,7 +57,7 @@ jobs:
     env:
       TF_VAR_DB_HOST: ${{ secrets.DB_HOST }}
       TF_VAR_DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      TV_VAR_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TF_VAR_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       TF_VAR_DB_NAME: ${{ secrets.DB_NAME }}
 
     steps:
