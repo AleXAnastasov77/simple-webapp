@@ -39,7 +39,7 @@ build {
     ]
   }
 
-  # Step 2: run your playbook
+  # Step 2: runs playbook
   provisioner "ansible-local" {
     playbook_file = "./playbooks/webserver.playbook.yaml"
   }
