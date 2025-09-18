@@ -46,7 +46,7 @@ build {
 
   post-processor "shell-local" {
     inline = [
-      "aws ssm put-parameter --name '/cs1/webserver/ami' --value '{{ .ArtifactId }}' --type String --overwrite"
+      "for /f \"tokens=2 delims=:\" %i in (\"{{ .ArtifactId }}\") do aws ssm put-parameter --name \"/cs1/webserver/ami\" --value %i --type String --overwrite"
     ]
   }
 }

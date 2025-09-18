@@ -3,8 +3,8 @@
 # Write environment variables for the webapp
 cat <<EOF > /etc/webapp.env
 DB_HOST=${DB_HOST}
-DB_USER=${DB_USER}
-DB_PASS=${DB_PASS}
+DB_USER=${DB_USERNAME}
+DB_PASS=${DB_PASSWORD}
 DB_NAME=${DB_NAME}
 EOF
 
