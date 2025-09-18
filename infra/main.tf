@@ -31,8 +31,8 @@ resource "aws_db_instance" "webapp_mysqldb_cs1" {
   engine                    = "mysql"
   engine_version            = "8.0"
   instance_class            = "db.t3.micro"
-  username                  = var.db_username
-  password                  = var.db_password
+  username                  = var.DB_USERNAME
+  password                  = var.DB_PASSWORD
   parameter_group_name      = "default.mysql8.0"
   skip_final_snapshot       = false
   final_snapshot_identifier = "webapp-mysqldb-final-${formatdate("YYYYMMDDhhmmss", timestamp())}"

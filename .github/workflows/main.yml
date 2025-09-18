@@ -6,7 +6,7 @@ on:
     branches:
       - master
     paths:
-      - 'infra/**'
+      - "infra/**"
 
 permissions:
   id-token: write
@@ -17,13 +17,11 @@ jobs:
     name: Terraform Plan
     runs-on: ubuntu-latest
     env:
-      TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-      TF_VAR_db_username: ${{ secrets.DB_USERNAME }}
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      
+      TF_VAR_DB_HOST: ${{ secrets.DB_HOST }}
+      TF_VAR_DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      TV_VAR_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TF_VAR_DB_NAME: ${{ secrets.DB_NAME }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -57,13 +55,11 @@ jobs:
     needs: terraform-plan
     environment: dev
     env:
-      TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-      TF_VAR_db_username: ${{ secrets.DB_USERNAME }}
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-    
+      TF_VAR_DB_HOST: ${{ secrets.DB_HOST }}
+      TF_VAR_DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      TV_VAR_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TF_VAR_DB_NAME: ${{ secrets.DB_NAME }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

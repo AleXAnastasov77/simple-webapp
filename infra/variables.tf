@@ -18,16 +18,28 @@ variable "custom_ami" {
   type        = string
   default     = "ami-06e8e64396022f397"
 }
-variable "db_username" {
+variable "DB_USERNAME" {
   description = "The username for the mysql db."
   type        = string
   default     = "eu-central-1"
   sensitive   = true
 }
 
-variable "db_password" {
+variable "DB_PASSWORD" {
   description = "The password for the mysql db."
   type        = string
   default     = "eu-central-1"
   sensitive   = true
+}
+
+variable "DB_HOST" {
+  description = "The host for the mysql db."
+  type        = string
+  default     = "eu-central-1"
+}
+
+variable "DB_NAME" {
+  description = "The name for the mysql db."
+  type        = string
+  default     = "eu-central-1"
 }

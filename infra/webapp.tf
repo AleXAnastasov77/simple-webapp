@@ -24,7 +24,12 @@ resource "aws_launch_template" "cs1_webapp" {
     security_groups = [aws_security_group.app_sg.id]
   }
 
-  user_data = base64encode(file("user_data.sh"))
+  user_data = base64encode(templatefile("${path.module}/user_data.sh", {
+    db_host     = var.DB_HOST
+    db_username = var.DB_USERNAME
+    db_password = var.DB_PASSWORD
+    db_name     = var.DB_NAME
+  }))
 }
 
 # ////////////////////// ALB & ASG //////////////////////////
