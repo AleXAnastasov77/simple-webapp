@@ -23,3 +23,60 @@ resource "aws_launch_template" "cs1_webapp" {
 
   user_data = base64encode(file("user_data.sh"))
 }
+
+# ////////////////////// ALB & ASG //////////////////////////
+
+resource "aws_lb_target_group" "lbtg_cs1" {
+  name        = "lbtg_cs1"
+  target_type = "instance"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.vpc_cs1.id
+  health_check {
+    path     = "/"
+    protocol = "HTTP"
+    matcher  = "200-399"   # treat any 2xx/3xx as healthy
+    interval = 30          # check every 30s
+    timeout  = 5           # must respond within 5s
+    healthy_threshold   = 3   # need 3 OKs in a row
+    unhealthy_threshold = 2   # 2 fails = unhealthy
+  }
+}
+
+resource "aws_lb" "alb_cs1" {
+  name               = "alb-cs1"
+  load_balancer_type = "application"
+  subnets            = [aws_subnet.public_cs1_A.id, aws_subnet.public_cs1_B.id]
+  security_groups = [aws_security_group.app_sg.id]
+}
+
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.alb_cs1.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.lbtg_cs1.arn
+  }
+}
+
+resource "aws_autoscaling_group" "bar" {
+  vpc_zone_identifier       = [aws_subnet.privateweb_cs1_A.id, aws_subnet.privateweb_cs1_B.id]
+  desired_capacity          = 2
+  max_size                  = 2
+  min_size                  = 1
+  target_group_arns         = [aws_lb_target_group.lbtg_cs1.arn]
+  termination_policies      = ["OldestInstance"]
+  health_check_type         = "ELB"
+  health_check_grace_period = 300
+  launch_template {
+    id      = aws_launch_template.cs1_webapp.id
+    version = "$Latest"
+  }
+  tag {
+    key                 = "Name"
+    value               = "cs1-webserver"
+    propagate_at_launch = true
+  }
+}
