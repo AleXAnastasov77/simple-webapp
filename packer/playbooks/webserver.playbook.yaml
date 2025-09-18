@@ -65,7 +65,7 @@
 
           [Install]
           WantedBy=multi-user.target
-        mode: '0644'
+        mode: "0644"
 
     - name: Enable and start Node Exporter
       systemd:
@@ -83,6 +83,7 @@
           [Unit]
           Description=Simple WebApp
           After=network.target
+          ConditionPathExists=/etc/webapp.env
 
           [Service]
           User=ubuntu
@@ -93,7 +94,7 @@
 
           [Install]
           WantedBy=multi-user.target
-        mode: '0644'
+        mode: "0644"
 
     - name: Reload systemd to pick up new service
       command: systemctl daemon-reload

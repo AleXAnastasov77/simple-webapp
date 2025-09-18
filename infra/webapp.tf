@@ -33,7 +33,7 @@ resource "aws_lb_target_group" "lbtg_cs1" {
   protocol    = "HTTP"
   vpc_id      = aws_vpc.vpc_cs1.id
   health_check {
-    path     = "/"
+    path     = "/health"
     protocol = "HTTP"
     port = 5000
     matcher  = "200-399"   # treat any 2xx/3xx as healthy
