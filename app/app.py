@@ -6,6 +6,7 @@ from flaskext.mysql import MySQL      # For newer versions of flask-mysql
 app = Flask(__name__)
 
 mysql = MySQL()
+load_dotenv("/etc/webapp.env")
 
 
 # MySQL configurations

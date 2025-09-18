@@ -39,4 +39,12 @@ resource "aws_db_instance" "webapp_mysqldb_cs1" {
   multi_az                  = true
   storage_type              = "gp2"
   vpc_security_group_ids    = [aws_security_group.db_sg.id]
+  lifecycle {
+    ignore_changes = [
+      password,                # Don’t try to reset the password every run
+      backup_retention_period, # AWS may enforce minimums
+      maintenance_window,      # AWS may adjust this
+      final_snapshot_identifier
+    ]
+  }
 }
