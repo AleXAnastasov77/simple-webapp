@@ -35,6 +35,7 @@ resource "aws_lb_target_group" "lbtg_cs1" {
   health_check {
     path     = "/"
     protocol = "HTTP"
+    port = 5000
     matcher  = "200-399"   # treat any 2xx/3xx as healthy
     interval = 30          # check every 30s
     timeout  = 5           # must respond within 5s
