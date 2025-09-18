@@ -9,6 +9,9 @@ resource "aws_launch_template" "cs1_webapp" {
   name_prefix   = "cs1-webapp-"
   image_id      = data.aws_ssm_parameter.webserver_ami.value
   instance_type = "t3.micro"
+  iam_instance_profile {
+    arn = "arn:aws:iam::057827529833:role/SSMRole"
+  }
   block_device_mappings {
     device_name = "/dev/sda1"
 
