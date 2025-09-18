@@ -11,5 +11,6 @@ EOF
 
 # Reload systemd and restart the service
 systemctl daemon-reexec
-systemctl restart webapp
+systemctl enable webapp
+systemctl start webapp
 
