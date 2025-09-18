@@ -29,7 +29,7 @@ resource "aws_launch_template" "cs1_webapp" {
 resource "aws_lb_target_group" "lbtg_cs1" {
   name        = "lbtg-cs1"
   target_type = "instance"
-  port        = 80
+  port        = 5000
   protocol    = "HTTP"
   vpc_id      = aws_vpc.vpc_cs1.id
   health_check {
