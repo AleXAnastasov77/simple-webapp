@@ -83,6 +83,13 @@ resource "aws_autoscaling_group" "bar" {
     id      = aws_launch_template.cs1_webapp.id
     version = "$Latest"
   }
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    triggers = ["launch_template"]
+  }
   tag {
     key                 = "Name"
     value               = "cs1-webserver"

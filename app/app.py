@@ -22,7 +22,7 @@ def main():
     return "Welcome!"
 
 @app.route("/health")
-def main():
+def health():
     return "OK!", 200
 
 @app.route('/how are you')
