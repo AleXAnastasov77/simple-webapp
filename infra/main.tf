@@ -39,6 +39,7 @@ resource "aws_db_instance" "webapp_mysqldb_cs1" {
   multi_az                  = true
   storage_type              = "gp2"
   vpc_security_group_ids    = [aws_security_group.db_sg.id]
+  snapshot_identifier = "webapp-mysqldb-final-20250918135639"
   lifecycle {
     ignore_changes = [
       password,                # Don’t try to reset the password every run
