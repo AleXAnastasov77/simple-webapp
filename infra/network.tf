@@ -179,6 +179,52 @@ resource "aws_security_group" "app_sg" {
     Name = "app-sg"
   }
 }
+resource "aws_security_group" "monitoring_sg" {
+  name        = "monitoring-sg"
+  description = "Security rules for the monitoring system."
+  vpc_id      = aws_vpc.vpc_cs1.id
+
+  ingress {
+    description = "Allow Prometheus"
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+  ingress {
+    description = "Allow Grafana"
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Allow Loki"
+    from_port   = 3100
+    to_port     = 3100
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+  ingress {
+    description = "Allow Alertmanager"
+    from_port   = 9093
+    to_port     = 9093
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "monitoring-sg"
+  }
+}
 
 
 resource "aws_security_group" "db_sg" {
