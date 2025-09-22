@@ -18,7 +18,7 @@ resource "aws_instance" "monitoring_ec2" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.small"
   iam_instance_profile = "SSMRole"
-  subnet_id = aws_subnet.public_cs1_A.id
+  subnet_id = aws_subnet.privatemonitoring_cs1_B.id
   security_groups = [aws_security_group.monitoring_sg.id]
   root_block_device {
     delete_on_termination = false

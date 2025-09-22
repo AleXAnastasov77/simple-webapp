@@ -58,6 +58,14 @@ resource "aws_subnet" "privatedb_cs1_B" {
     Name = "privatedb_cs1_B"
   }
 }
+resource "aws_subnet" "privatemonitoring_cs1_B" {
+  vpc_id            = aws_vpc.vpc_cs1.id
+  cidr_block        = "10.0.13.0/24"
+  availability_zone = data.aws_availability_zones.available.names[1]
+  tags = {
+    Name = "privatemonitoring_cs1_B"
+  }
+}
 
 
 # ////////////////////// GATEWAYS //////////////////////////
@@ -135,6 +143,10 @@ resource "aws_route_table_association" "e" {
 }
 resource "aws_route_table_association" "f" {
   subnet_id      = aws_subnet.privateweb_cs1_B.id
+  route_table_id = aws_route_table.rt_private_cs1.id
+}
+resource "aws_route_table_association" "g" {
+  subnet_id      = aws_subnet.privatemonitoring_cs1_B.id
   route_table_id = aws_route_table.rt_private_cs1.id
 }
 
@@ -250,4 +262,38 @@ resource "aws_security_group" "db_sg" {
   tags = {
     Name = "db-sg"
   }
+}
+
+# ////////////////////// VPN //////////////////////////
+data "aws_acm_certificate" "cert" {
+  domain   = "server.vpn.internal"
+  statuses = ["ISSUED"]
+}
+
+resource "aws_ec2_client_vpn_endpoint" "vpnendpoint_cs1" {
+  description            = "VPN for monitoring access"
+  server_certificate_arn = aws_acm_certificate.cert.arn
+  client_cidr_block      = "10.100.0.0/16"
+  dns_servers = ["10.0.0.2"]
+  vpc_id = aws_vpc.vpc_cs1.id
+
+  authentication_options {
+    type                       = "certificate-authentication"
+    root_certificate_chain_arn = aws_acm_certificate.cert.arn
+  }
+
+  connection_log_options {
+    enabled               = false
+  }
+}
+
+resource "aws_ec2_client_vpn_network_association" "network_association" {
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpnendpoint_cs1.id
+  subnet_id              = aws_subnet.privatemonitoring_cs1_B.id
+}
+
+resource "aws_ec2_client_vpn_authorization_rule" "authorization_rule" {
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpnendpoint_cs1.id
+  target_network_cidr    = aws_subnet.privatemonitoring_cs1_B.cidr_block
+  authorize_all_groups   = true
 }
