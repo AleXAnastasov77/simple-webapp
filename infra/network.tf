@@ -197,6 +197,20 @@ resource "aws_security_group" "monitoring_sg" {
   vpc_id      = aws_vpc.vpc_cs1.id
 
   ingress {
+    description = "Allow SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+  ingress {
+    description = "Allow ICMP"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+  ingress {
     description = "Allow Prometheus"
     from_port   = 9090
     to_port     = 9090
