@@ -276,6 +276,7 @@ resource "aws_ec2_client_vpn_endpoint" "vpnendpoint_cs1" {
   client_cidr_block      = "10.100.0.0/16"
   dns_servers = ["10.0.0.2"]
   vpc_id = aws_vpc.vpc_cs1.id
+  split_tunnel = true
 
   authentication_options {
     type                       = "certificate-authentication"
