@@ -20,6 +20,7 @@ resource "aws_instance" "monitoring_ec2" {
   iam_instance_profile = "SSMRole"
   subnet_id = aws_subnet.privatemonitoring_cs1_B.id
   vpc_security_group_ids = [aws_security_group.monitoring_sg.id]
+  key_name = "ansible-keypair"
   root_block_device {
     delete_on_termination = false
     volume_size = 25
