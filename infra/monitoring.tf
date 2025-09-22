@@ -19,7 +19,7 @@ resource "aws_instance" "monitoring_ec2" {
   instance_type = "t3.small"
   iam_instance_profile = "SSMRole"
   subnet_id = aws_subnet.privatemonitoring_cs1_B.id
-  security_groups = [aws_security_group.monitoring_sg.id]
+  vpc_security_group_ids = [aws_security_group.monitoring_sg.id]
   root_block_device {
     delete_on_termination = false
     volume_size = 25
