@@ -272,14 +272,14 @@ data "aws_acm_certificate" "cert" {
 
 resource "aws_ec2_client_vpn_endpoint" "vpnendpoint_cs1" {
   description            = "VPN for monitoring access"
-  server_certificate_arn = aws_acm_certificate.cert.arn
+  server_certificate_arn = data.aws_acm_certificate.cert.arn
   client_cidr_block      = "10.100.0.0/16"
   dns_servers = ["10.0.0.2"]
   vpc_id = aws_vpc.vpc_cs1.id
 
   authentication_options {
     type                       = "certificate-authentication"
-    root_certificate_chain_arn = aws_acm_certificate.cert.arn
+    root_certificate_chain_arn = data.aws_acm_certificate.cert.arn
   }
 
   connection_log_options {
