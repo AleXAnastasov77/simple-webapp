@@ -72,7 +72,7 @@ resource "aws_lb_listener" "http" {
 
 resource "aws_autoscaling_group" "bar" {
   vpc_zone_identifier       = [aws_subnet.privateweb_cs1_A.id, aws_subnet.privateweb_cs1_B.id]
-  desired_capacity          = 2
+  desired_capacity          = 1
   max_size                  = 2
   min_size                  = 1
   target_group_arns         = [aws_lb_target_group.lbtg_cs1.arn]
