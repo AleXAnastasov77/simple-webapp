@@ -233,13 +233,13 @@ resource "aws_security_group" "monitoring_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # ingress {
-  #   description = "Allow Loki"
-  #   from_port   = 3100
-  #   to_port     = 3100
-  #   protocol    = "tcp"
-  #   cidr_blocks = ["10.0.0.0/8"]
-  # }
+  ingress {
+    description = "Allow Loki"
+    from_port   = 3100
+    to_port     = 3100
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
   # ingress {
   #   description = "Allow Alertmanager"
   #   from_port   = 9093

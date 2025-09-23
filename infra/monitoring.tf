@@ -22,7 +22,7 @@ resource "aws_instance" "monitoring_ec2" {
   subnet_id = aws_subnet.privatemonitoring_cs1_B.id
   vpc_security_group_ids = [aws_security_group.monitoring_sg.id]
   key_name = "ansible-keypair"
-  
+  private_ip = "10.0.13.247"
   root_block_device {
     delete_on_termination = false
     volume_size = 25
