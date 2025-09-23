@@ -21,6 +21,7 @@
           - python3-dev
           - build-essential
           - libmysqlclient-dev
+          - unzip
         state: present
 
     - name: Clone the repository
@@ -104,3 +105,84 @@
         name: webapp
         enabled: yes
         state: stopped
+
+    # ---------------------------
+    # Alloy Node Exporter
+    # ---------------------------
+    - name: Install Grafana APT key
+      ansible.builtin.apt_key:
+        url: https://apt.grafana.com/gpg.key
+        keyring: /etc/apt/keyrings/grafana.gpg
+        state: present
+
+    - name: Add Grafana APT repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main"
+        state: present
+        filename: grafana
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Alloy
+      ansible.builtin.apt:
+        name: alloy
+        state: present
+
+    - name: Create Alloy config
+      ansible.builtin.copy:
+        dest: /etc/alloy/config.alloy
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          logging {
+            level = "info"
+          }
+
+          prometheus.exporter.unix "default" {
+            include_exporter_metrics = true
+            disable_collectors       = ["mdadm"]
+          }
+
+          prometheus.scrape "default" {
+            targets    = prometheus.exporter.unix.default.targets
+            forward_to = []
+          }
+
+          loki.source.file "syslog" {
+            targets = [
+              { __path__ = "/var/log/syslog", service = "syslog" },
+            ]
+            forward_to = [loki.write.remote.receiver]
+          }
+
+          loki.source.file "authlog" {
+            targets = [
+              { __path__ = "/var/log/auth.log", service = "authlog" },
+            ]
+            forward_to = [loki.write.remote.receiver]
+          }
+
+
+          loki.source.journal "webapp_logs" {
+            matches    = "_SYSTEMD_UNIT=webapp.service"
+            forward_to = [loki.write.remote.receiver]
+            labels     = { service = "webapp" }
+          }
+
+          loki.write "remote" {
+            endpoint {
+              url = "http://ip-10-0-13-247.eu-central-1.compute.internal:3100/loki/api/v1/push"
+            }
+          }
+
+    - name: Reload systemd
+      ansible.builtin.command: systemctl daemon-reload
+
+    - name: Enable and start Alloy
+      ansible.builtin.systemd:
+        name: alloy
+        enabled: yes
+        state: restarted
