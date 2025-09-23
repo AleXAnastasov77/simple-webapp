@@ -91,8 +91,8 @@ resource "aws_autoscaling_group" "bar" {
     triggers = ["launch_template"]
   }
   tag {
-    key                 = "Name"
-    value               = "cs1-webserver"
+    key                 = "project"
+    value               = "Case Study 1"
     propagate_at_launch = true
   }
 }
