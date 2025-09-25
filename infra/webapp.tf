@@ -34,47 +34,47 @@ resource "aws_launch_template" "cs1_webapp" {
 
 # ////////////////////// ALB & ASG //////////////////////////
 
-resource "aws_lb_target_group" "lbtg_cs1" {
-  name        = "lbtg-cs1"
-  target_type = "instance"
-  port        = 5000
-  protocol    = "HTTP"
-  vpc_id      = aws_vpc.vpc_cs1.id
-  health_check {
-    path     = "/health"
-    protocol = "HTTP"
-    port = 5000
-    matcher  = "200-399"   # treat any 2xx/3xx as healthy
-    interval = 30          # check every 30s
-    timeout  = 5           # must respond within 5s
-    healthy_threshold   = 3   # need 3 OKs in a row
-    unhealthy_threshold = 2   # 2 fails = unhealthy
-  }
-}
+# resource "aws_lb_target_group" "lbtg_cs1" {
+#   name        = "lbtg-cs1"
+#   target_type = "instance"
+#   port        = 5000
+#   protocol    = "HTTP"
+#   vpc_id      = aws_vpc.vpc_cs1.id
+#   health_check {
+#     path     = "/health"
+#     protocol = "HTTP"
+#     port = 5000
+#     matcher  = "200-399"   # treat any 2xx/3xx as healthy
+#     interval = 30          # check every 30s
+#     timeout  = 5           # must respond within 5s
+#     healthy_threshold   = 3   # need 3 OKs in a row
+#     unhealthy_threshold = 2   # 2 fails = unhealthy
+#   }
+# }
 
-resource "aws_lb" "alb_cs1" {
-  name               = "alb-cs1"
-  load_balancer_type = "application"
-  subnets            = [aws_subnet.public_cs1_A.id, aws_subnet.public_cs1_B.id]
-  security_groups = [aws_security_group.app_sg.id]
-}
+# resource "aws_lb" "alb_cs1" {
+#   name               = "alb-cs1"
+#   load_balancer_type = "application"
+#   subnets            = [aws_subnet.public_cs1_A.id, aws_subnet.public_cs1_B.id]
+#   security_groups = [aws_security_group.app_sg.id]
+# }
 
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.alb_cs1.arn
-  port              = 80
-  protocol          = "HTTP"
+# resource "aws_lb_listener" "http" {
+#   load_balancer_arn = aws_lb.alb_cs1.arn
+#   port              = 80
+#   protocol          = "HTTP"
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.lbtg_cs1.arn
-  }
-}
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.lbtg_cs1.arn
+#   }
+# }
 
 resource "aws_autoscaling_group" "bar" {
   vpc_zone_identifier       = [aws_subnet.privateweb_cs1_A.id, aws_subnet.privateweb_cs1_B.id]
-  desired_capacity          = 1
-  max_size                  = 2
-  min_size                  = 1
+  desired_capacity          = 0
+  max_size                  = 0
+  min_size                  = 0
   target_group_arns         = [aws_lb_target_group.lbtg_cs1.arn]
   termination_policies      = ["OldestInstance"]
   health_check_type         = "ELB"
@@ -93,6 +93,11 @@ resource "aws_autoscaling_group" "bar" {
   tag {
     key                 = "project"
     value               = "Case Study 1"
+    propagate_at_launch = true
+  }
+  tag {
+    key                 = "Name"
+    value               = "cs1_webserver"
     propagate_at_launch = true
   }
 }
