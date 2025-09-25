@@ -13,10 +13,19 @@ data "aws_ami" "ubuntu" {
 
   owners = ["099720109477"] # Canonical
 }
+data "aws_ami" "monitoring_image" {
+  most_recent = true
 
+  filter {
+    name   = "image-id"
+    values = ["ami-074f205308629223c"]
+  }
+
+  owners = ["057827529833"] # your AWS account ID
+}
 
 resource "aws_instance" "monitoring_ec2" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = data.aws_ami.monitoring_image.id
   instance_type = "t3.small"
   iam_instance_profile = "MonitoringRole"
   subnet_id = aws_subnet.privatemonitoring_cs1_B.id
