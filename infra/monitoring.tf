@@ -18,7 +18,7 @@ data "aws_ami" "monitoring_image" {
 
   filter {
     name   = "image-id"
-    values = ["ami-074f205308629223c"]
+    values = ["ami-01699847b69c20cf9"]
   }
 
   owners = ["057827529833"] # your AWS account ID
